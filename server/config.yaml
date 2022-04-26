@@ -1,0 +1,12 @@
+# mysql connect configuration
+mysql:
+  path: "127.0.0.1"
+  port: "3306"
+  config: ""
+  db-name: "go_gin_api"
+  username: "root"
+  password: "Ljf941118"
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false

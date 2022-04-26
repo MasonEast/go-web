@@ -1,4 +1,4 @@
-package main
+package route
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func Run() {
 	r := gin.Default()
 	r.GET("/user/:name/*action", func(c *gin.Context){
 		name := c.Param("name")
