@@ -2,7 +2,7 @@ package request
 
 import (
 	"github.com/golang-jwt/jwt/v4"
-	uuid "github.com/satori/go.uuid"
+	uuid "github.com/google/uuid"
 )
 // PageInfo Paging common input parameter structure
 type PageInfo struct {

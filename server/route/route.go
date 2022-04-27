@@ -20,6 +20,7 @@ func Run() {
 
 		var user api.PublicApi
 		publicGroup.POST("/register", user.Register)
+		publicGroup.POST("/login", user.Login)
 
 	}
 

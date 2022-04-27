@@ -1,6 +1,7 @@
 package response
 
 import (
+	"myapp/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,12 @@ type Response struct {
 	Code int         `json:"code"`
 	Data interface{} `json:"data"`
 	Msg  string      `json:"msg"`
+}
+
+type LoginResponse struct {
+	User      model.UserModel `json:"user"`
+	Token     string         `json:"token"`
+	ExpiresAt int64          `json:"expiresAt"`
 }
 
 const (

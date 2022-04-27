@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"myapp/global"
+	"myapp/middleware"
 	"myapp/model"
+	"myapp/model/common/request"
 	"myapp/model/common/response"
 	"myapp/utils"
 
@@ -15,6 +17,7 @@ import (
 
 type PublicApi struct {}
 
+// 用户注册
 func (p *PublicApi) Register(c *gin.Context){
 	var user model.UserModel
 	c.ShouldBindJSON(&user)
@@ -37,4 +40,41 @@ func (p *PublicApi) Register(c *gin.Context){
 	}
 
 	response.OkWithMessage("创建成功", c)
+}
+
+// 用户登录
+func (p *PublicApi) Login(c *gin.Context) {
+	var user model.UserModel
+	c.ShouldBindJSON(&user)
+
+	user.Password = utils.MD5V([]byte(user.Password))
+	err := global.GB_DB.Where("username = ? AND password = ?", user.Username, user.Password).First(&user).Error
+	if err == nil {
+		p.tokenNext(c, user)
+	}
+}
+
+// 登录以后签发jwt
+func (p *PublicApi) tokenNext(c *gin.Context, user model.UserModel) {
+	j := &middleware.JWT{SigningKey: []byte(global.GB_CONFIG.JWT.SigningKey)} // 唯一签名
+
+	claims := j.CreateClaims(request.BaseClaims{
+		UUID:        user.UUID,
+		NickName:    user.Nickname,
+		Username:    user.Username,
+		AuthorityId: user.AuthorityId,
+	})
+	token, err := j.CreateToken(claims)
+
+	if err != nil {
+		response.FailWithMessage("获取token失败", c)
+		return
+	}
+	
+	response.OkWithDetailed(response.LoginResponse{
+		User:      user,
+		Token:     token,
+		ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+	}, "登录成功", c)
+
 }
