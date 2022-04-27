@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"myapp/global"
-	"myapp/model/common/response"
 	"myapp/model/common/request"
+	"myapp/model/common/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -19,10 +19,10 @@ type JWT struct {
 
 
 var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
+	ErrTokenExpired     = errors.New("token is expired")
+	ErrTokenNotValidYet = errors.New("token not active yet")
+	ErrTokenMalformed   = errors.New("that's not even a token")
+	ErrTokenInvalid     = errors.New("couldn't handle this token")
 )
 
 
@@ -40,7 +40,7 @@ func Jwt() gin.HandlerFunc {
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if err == TokenExpired {
+			if err == ErrTokenExpired {
 				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
 				c.Abort()
 				return
@@ -50,6 +50,7 @@ func Jwt() gin.HandlerFunc {
 			return
 		}
 
+		// 当过期时间 - 当前时间 < 缓冲时间时，进行续期
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
 
 			claims.ExpiresAt = time.Now().Unix() + global.GB_CONFIG.JWT.ExpiresTime
@@ -72,14 +73,14 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
+				return nil, ErrTokenMalformed
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				// Token is expired
-				return nil, TokenExpired
+				return nil, ErrTokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
+				return nil, ErrTokenNotValidYet
 			} else {
-				return nil, TokenInvalid
+				return nil, ErrTokenInvalid
 			}
 		}
 	}
@@ -87,10 +88,10 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
-		return nil, TokenInvalid
+		return nil, ErrTokenInvalid
 
 	} else {
-		return nil, TokenInvalid
+		return nil, ErrTokenInvalid
 	}
 }
 

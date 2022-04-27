@@ -1,8 +1,8 @@
 jwt:
-  signing-key: "qmPlus"
+  signing-key: "mason"
   expires-time: 604800
   buffer-time: 86400
-  issuer: "qmPlus"
+  issuer: "mason"
 
 # mysql connect configuration
 mysql:
