@@ -2,6 +2,7 @@ package route
 
 import (
 	"myapp/api"
+	"myapp/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,8 +10,24 @@ import (
 func Run() {
 	r := gin.Default()
 
-	var admin api.AdminApi
-	r.GET("/admin", admin.Get)
+	// 公用路由（不需要鉴权）
+	{
+		publicGroup := r.Group("")
+		// 健康检测
+		publicGroup.GET("/health", func(c *gin.Context) {
+			c.JSON(200, "ok")
+		})
+
+	}
+
+	// 需要鉴权的路由
+	{
+		privateGroup := r.Group("")
+		privateGroup.Use(middleware.Jwt())
+
+		var admin api.AdminApi
+		privateGroup.GET("/admin", admin.Get)
+	}
 
 	// Listen and Server in 0.0.0.0:8888
 	r.Run(":8888")

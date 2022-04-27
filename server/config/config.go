@@ -1,8 +1,8 @@
 package config
 
-type Server struct {
+type Config struct {
 
-	// gorm
-	Mysql  Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Mysql  Mysql `json:"mysql" yaml:"mysql"`
+	JWT		JWT  `json:"jwt" yaml:"jwt"`
 
 }
