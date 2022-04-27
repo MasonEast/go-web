@@ -11,7 +11,7 @@ import (
 
 type AdminApi struct {}
 
-func (a *AdminApi)Get(c *gin.Context){
+func (a *AdminApi) Get(c *gin.Context){
 	var api model.AdminModel
 	c.ShouldBindJSON(&api)
 
@@ -20,6 +20,7 @@ func (a *AdminApi)Get(c *gin.Context){
 	if err != nil {
 		fmt.Println(err)
 		response.FailWithMessage("获取失败", c)
+		return
 	}
 
 	response.OkWithData(api, c)

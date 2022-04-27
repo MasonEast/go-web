@@ -18,6 +18,9 @@ func Run() {
 			c.JSON(200, "ok")
 		})
 
+		var user api.PublicApi
+		publicGroup.POST("/register", user.Register)
+
 	}
 
 	// 需要鉴权的路由
