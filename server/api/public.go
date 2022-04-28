@@ -21,7 +21,7 @@ type PublicApi struct {}
 func (p *PublicApi) Register(c *gin.Context){
 	var user model.UserModel
 	c.ShouldBindJSON(&user)
-
+	
 	// 判断用户名是否注册
 	if !errors.Is(global.GB_DB.Where("username = ?", user.Username).First(&user).Error, gorm.ErrRecordNotFound) { 
 		response.FailWithMessage("用户名已注册", c)
@@ -50,7 +50,10 @@ func (p *PublicApi) Login(c *gin.Context) {
 	user.Password = utils.MD5V([]byte(user.Password))
 	err := global.GB_DB.Where("username = ? AND password = ?", user.Username, user.Password).First(&user).Error
 	if err == nil {
+		// 账号密码通过后，签发token
 		p.tokenNext(c, user)
+	} else {
+		response.FailWithMessage("账号/密码错误", c)
 	}
 }
 

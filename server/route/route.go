@@ -31,6 +31,10 @@ func Run() {
 
 		var admin api.AdminApi
 		privateGroup.GET("/admin", admin.Get)
+
+		var article api.ArticleApi
+		articleGroup := privateGroup.Group("/article")
+		articleGroup.POST("/create", article.Create)
 	}
 
 	// Listen and Server in 0.0.0.0:8888
