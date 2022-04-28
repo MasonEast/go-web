@@ -35,6 +35,9 @@ func Run() {
 		var article api.ArticleApi
 		articleGroup := privateGroup.Group("/article")
 		articleGroup.POST("/create", article.Create)
+		articleGroup.PUT("/update", article.Update)
+		articleGroup.DELETE("/delete", article.Delete)
+		articleGroup.GET("/list", article.ArticleList)
 	}
 
 	// Listen and Server in 0.0.0.0:8888
