@@ -19,7 +19,7 @@ func (a *ArticleApi) Create(c *gin.Context) {
 	var article model.ArticleModel
 	c.ShouldBindJSON(&article)
 
-	article.CreateTime = time.Now().Format("2006/1/2 15:04:05")
+	article.CreateTime = time.Now().Format(global.GB_Time_Format)
 	article.UUID = uuid.New()
 
 	err := global.GB_DB.Create(&article).Error

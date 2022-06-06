@@ -15,6 +15,7 @@ var (
 	GB_CONFIG config.Config
 	GB_DB *gorm.DB
 	GB_Concurrency_Control = &singleflight.Group{}
+	GB_Time_Format = "2006/1/2 15:04:05"
 )
 
 func init () {

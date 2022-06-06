@@ -38,6 +38,9 @@ func Run() {
 		articleGroup.PUT("/update", article.Update)
 		articleGroup.DELETE("/delete", article.Delete)
 		articleGroup.GET("/list", article.ArticleList)
+
+		var apoint api.ApointApi
+		privateGroup.POST("/send", apoint.Send)
 	}
 
 	// Listen and Server in 0.0.0.0:8888
