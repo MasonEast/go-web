@@ -16,10 +16,11 @@ var (
 	GB_Concurrency_Control = &singleflight.Group{}
 	GB_Time_Format = "2006/1/2 15:04:05"
 
-	TOPIC     = "demo111" //主题
+	TOPIC     = "looklook-log" //主题
 	PARTITION = 0          //partition ID
 
-	SERVER_LIST = "localhost:9092"
+	SERVER_LIST = "localhost:9094"
+
 )
 
 func init () {

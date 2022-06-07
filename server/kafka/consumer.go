@@ -71,6 +71,6 @@ func (c *Consumer) Start() {
 		fmt.Printf("fail to init consumer, err:%v", err)
 		return
 	}
-	go consumer.GetMessageToAll(1)
+	go consumer.GetMessageToAll(-1)
 
 }

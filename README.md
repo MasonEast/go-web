@@ -28,3 +28,15 @@ go 学习练手项目
 - gin web 框架
 - gorm 连接数据库
 -
+
+## 踩坑
+
+### 接入 go-stash 消费 kafka 数据
+
+坑点：
+
+- go-stash 必须要 kafka 的 consumer Group
+- kafka 要同时配置对 docker 容器内和对容器外的访问端口，go-stash 访问内部的，项目访问外部的。
+
+问题：
+虽然通过 go-stash 接入了 kafka 的数据，但是没有 timestamp，还要排查。
