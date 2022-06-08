@@ -31,6 +31,13 @@ func (a *ApointApi) Send(c *gin.Context) {
 
 	apoint.CreateTime = time.Now().Format(global.GB_Time_Format)
 	apoint.UUID = uuid.New()
+	// apoint.Data["@timestamp"] = time.Now()
+
+	// jsonStr := `
+	// 	"name": "mason",
+	// 	"age': 12
+	// `
+	// json.Marshal(apoint.Data)
 
 	producer.SendMessage(apoint.Data)
 

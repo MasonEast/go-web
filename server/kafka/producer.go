@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"myapp/global"
+	"time"
 
 	"github.com/Shopify/sarama"
 )
@@ -40,6 +41,7 @@ func (p *Producer) InitProducer() {
 func (p *Producer) SendMessage(txt string) {
 	msg := &sarama.ProducerMessage{}
 	msg.Topic = p.Topic
+	msg.Timestamp = time.Now()
 	// txt := fmt.Sprintf("ProducerId: %d, this is a test log %d", p.ProducerId, p.MessageId)
 	msg.Value = sarama.StringEncoder(txt)
 	pid, offset, err := p.Producer.SendMessage(msg)
@@ -47,7 +49,7 @@ func (p *Producer) SendMessage(txt string) {
 		fmt.Println("send message failed, err:", err)
 		return
 	}
-	fmt.Printf("ProducerId: %d, MessageId: %d, offset: %d, pid: %d\n", p.ProducerId, p.MessageId, offset, pid)
+	fmt.Printf("ProducerId: %d, MessageId: %d, offset: %d, pid: %d, msg.Value: %d\n", p.ProducerId, p.MessageId, offset, pid, msg.Value)
 
 	p.MessageId++
 }

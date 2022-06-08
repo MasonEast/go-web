@@ -42,4 +42,4 @@ Clusters:
       ElasticSearch:
         Hosts:
           - "http://elasticsearch:9200"
-        Index: "looklook-{{yyyy-MM-dd}}"
+        Index: "mylog-{{yyyy-MM-dd}}"
