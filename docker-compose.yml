@@ -76,11 +76,12 @@ services:
   #     - looklook_net
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.3.0
+    image: docker.elastic.co/logstash/logstash:8.2.2
     container_name: logstash
     restart: always
     volumes:
       - ./deploy/logstash/config.yml:/usr/share/logstash/config/logstash.yml
+      - ./deploy/logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - 5044:5044
     networks:

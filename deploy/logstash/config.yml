@@ -14,28 +14,4 @@
 #   - elasticsearch:
 #     hosts: ["http://elasticsearch:9200"]
 #     index: "logstash-{{yyyy-MM-dd}}"
-#输入配置，一个input{}里可以配置多个输入源
-input {
-  #kafka输入源配置
-  kafka {
-    #kafka集群地址
-    bootstrap_servers => "kafka:9092"
-    #从kafka中哪个topic读取数据，这里的topic名要与filebeat中使用的topic保持一致
-    topics => ["looklook-log"]
-    #这是kafka中的消费组者ID，默认值是“logstash”。kafka将消息发到每个消费者组中，同一个组中的消费者收到的数据不重复。例如有两个消费者组G1、G2，G1中有成员A、B，G2中有成员C、D。kafka从输入中收到了10条消息，会将这10条消息同时发送给G1和G2，A和B各会收到这10条消息中的一部分，他们收到消息的并集就是这10条消息，C和D同理。
-    group_id => "ConsumerGroupID"
-    #logstash的消费线程，一般一个线程对应kafka中的一个partition（分区），同一组logstash的consumer_threads之和应该不大于一个topic的partition，超过了就是资源的浪费，一般的建议是相等。
-    consumer_threads => 5
-    #由于beat传输数据给kafka集群的时候，会附加很多tag，默认情况下，logstash就会将这串tag也认为是message的一部分。这样不利于后期的数据处理。所有需要添加codec处理。得到原本的message数据。
-    # codec => json
-  }
-}
-
-#输出配置，这里表示输出到文件
-output {
-  elasticsearch {
-    hosts => ["http://elasticsearch:9200"]
-    index => "logstash222-{{yyyy-MM-dd}}"
-  }
-}
-
+http.host: "0.0.0.0"
