@@ -41,6 +41,7 @@ func Run() {
 
 		var apoint api.ApointApi
 		privateGroup.POST("/send", apoint.Send)
+		privateGroup.POST("/search", apoint.Search)
 	}
 
 	// Listen and Server in 0.0.0.0:8888

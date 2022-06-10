@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"myapp/global"
 	"myapp/kafka"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/olivere/elastic/v7"
 )
 
 type ApointApi struct {}
@@ -31,13 +33,6 @@ func (a *ApointApi) Send(c *gin.Context) {
 
 	apoint.CreateTime = time.Now().Format(global.GB_Time_Format)
 	apoint.UUID = uuid.New()
-	// apoint.Data["@timestamp"] = time.Now()
-
-	// jsonStr := `
-	// 	"name": "mason",
-	// 	"age': 12
-	// `
-	// json.Marshal(apoint.Data)
 
 	producer.SendMessage(apoint.Data)
 
@@ -48,4 +43,29 @@ func (a *ApointApi) Send(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("创建成功", c)
+}
+
+
+// 查询数据
+func (a *ApointApi) Search(c *gin.Context) {
+	client, err := elastic.NewClient(elastic.SetURL("http://localhost:9200"), elastic.SetSniff(false))
+	if err != nil {
+		fmt.Println("create elastic client err:",err)
+	}
+	// res, err := client.Get().Index("logstash-2022.06.10").Id("tlOQS4EBh3aiP3pGr_qn").Do(context.Background())
+
+	rangeQuery := elastic.NewRangeQuery("timestamp").Gte(1545634340000).Lte("now")
+	res, err := client.Search().
+	Index("logstash-2022.06.10").
+	Query(rangeQuery).
+	// From(0).
+	// Size(10).
+	Do(context.Background())
+	
+	if err != nil {
+		fmt.Println("get elastic client err:",err)
+	}
+
+	response.OkWithData(res, c)
+
 }
