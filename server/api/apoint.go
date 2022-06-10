@@ -54,7 +54,7 @@ func (a *ApointApi) Search(c *gin.Context) {
 	}
 	// res, err := client.Get().Index("logstash-2022.06.10").Id("tlOQS4EBh3aiP3pGr_qn").Do(context.Background())
 
-	rangeQuery := elastic.NewRangeQuery("timestamp").Gte(1545634340000).Lte("now")
+	rangeQuery := elastic.NewRangeQuery("@timestamp").Gt("2022-06-09").Lt("now")
 	res, err := client.Search().
 	Index("logstash-2022.06.10").
 	Query(rangeQuery).
